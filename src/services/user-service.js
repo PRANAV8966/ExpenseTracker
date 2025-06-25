@@ -1,4 +1,6 @@
 const { UserRepository } = require('../repository/user-repository.js');
+const bcrypt = require('bcrypt');
+
 
 class UserService {
 
@@ -46,15 +48,29 @@ class UserService {
         }
      }
 
-     async getUserByEmail(Email) {
+     async signIn(data) {
         try {
-            const user = await this.userService.getUserByEmail(Email);
-            return user;
+            const user = await this.userService.signIn(data.email);
+            if (!user) {
+                throw {error:'404:user not found!!'}
+            }
+            const status = await this.#checkPassword(data.password, user.password);
+            return status;
         } catch (error) {
             console.log('some error occured at service', error);
             throw error;
         }
      }
+
+     #checkPassword(userPlainInputPassword, encryptedPassword) {
+        try {
+            const response = bcrypt.compareSync(userPlainInputPassword, encryptedPassword);
+            return response;
+        } catch (error) {
+            console.log('password validation failed');
+            throw error;
+        }
+    }
 }
 
 module.exports = {

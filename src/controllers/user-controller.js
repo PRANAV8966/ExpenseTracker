@@ -61,9 +61,9 @@ const getAllUser = async (req, res) => {
     }
 }
 
-const getUserByEmail = async (req, res) => {
+const signIn = async (req, res) => {
     try {
-        const user = await userController.getUserByEmail(req.body.email);
+        const user = await userController.signIn(req.body);
         return res.status(200).json({
             data:user,
             success:true,
@@ -85,5 +85,5 @@ module.exports = {
     createUser,
     getAllUser,
     getUser,
-    getUserByEmail
+    signIn
 }

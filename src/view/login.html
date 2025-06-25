@@ -28,18 +28,28 @@
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
 
-                const response = await axios.post('http://localhost:3000/api/getUserByEmail/', {
+                const response = await axios.post('http://localhost:3000/api/signIn/', {
                     email,
                     password
                 });
+
+                console.log(response, response.data);
+
                 if (response.data.data === null) {
                     alert('Log-In failed! error code:404 | NOT FOUND!!');
-                    window.location.href = "index.html";
+                    //window.location.href = "index.html";
                     return;
                 }
+
+                if (!response.data.data) {
+                    alert('incorrect password!! 401 | unauthorized');
+                    //window.location.href = "index.html";
+                    return;
+                }
+                console.log(response);
                 alert('Log-In successfull');
             } catch (error) {
-                alert('Log-In failed! errpr code:404 | NOT FOUND!!');
+                alert('Log-In failed! errpr code:404 | USER NOT FOUND!!');
                 window.location.href = "index.html";
                 return;
             }  
