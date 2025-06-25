@@ -14,11 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
         email,
         password
       });
-
       alert('Registration successful!');
       form.reset();
     } catch (error) {
-        console.log(error);
       alert('Registration failed!');
     }
      });

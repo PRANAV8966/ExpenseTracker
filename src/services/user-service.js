@@ -45,6 +45,16 @@ class UserService {
             throw error;
         }
      }
+
+     async getUserByEmail(Email) {
+        try {
+            const user = await this.userService.getUserByEmail(Email);
+            return user;
+        } catch (error) {
+            console.log('some error occured at service', error);
+            throw error;
+        }
+     }
 }
 
 module.exports = {

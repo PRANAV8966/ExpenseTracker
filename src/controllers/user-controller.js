@@ -61,8 +61,29 @@ const getAllUser = async (req, res) => {
     }
 }
 
+const getUserByEmail = async (req, res) => {
+    try {
+        const user = await userController.getUserByEmail(req.body.email);
+        return res.status(200).json({
+            data:user,
+            success:true,
+            message: 'successfully fetched user',
+            error:{}
+        });
+    } catch (error) {
+        console.log('some error occured at controller', error);
+        return res.status(500).json({
+            data:{},
+            success:false,
+            message : 'failed to fetch user',
+            error:error
+        });
+    }
+}
+
 module.exports = {
     createUser,
     getAllUser,
-    getUser
+    getUser,
+    getUserByEmail
 }

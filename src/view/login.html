@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker User Log-In</h1>
+    <div class="form-wrapper">
+      <form class="signup-form" onsubmit="handleLogin(event)">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Log-In</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function handleLogin(event) {
+            try {
+                event.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                const response = await axios.post('http://localhost:3000/api/getUserByEmail/', {
+                    email,
+                    password
+                });
+                if (response.data.data === null) {
+                    alert('Log-In failed! error code:404 | NOT FOUND!!');
+                    window.location.href = "index.html";
+                    return;
+                }
+                alert('Log-In successfull');
+            } catch (error) {
+                alert('Log-In failed! errpr code:404 | NOT FOUND!!');
+                window.location.href = "index.html";
+                return;
+            }  
+    }
+    </script>
+</body>
+</html>
