@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
-
-const { PORT } = require('./src/config/server-config.js');
+const cors = require('cors')
+;const { PORT } = require('./src/config/server-config.js');
 const apiRoutes = require('./src/routes/index.js');
 
 const startServer = async () => {
 
     app.use(express.json());
     app.use(express.urlencoded({extended:true}));
+    app.use(cors());
 
     app.use('/api', apiRoutes);
 
