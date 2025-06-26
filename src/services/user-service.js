@@ -55,7 +55,11 @@ class UserService {
                 throw {error:'404:user not found!!'}
             }
             const status = await this.#checkPassword(data.password, user.password);
-            return status;
+            if (status) {
+                return user;
+            }
+
+            throw {error:'incorrect user details'};
         } catch (error) {
             console.log('some error occured at service', error);
             throw error;

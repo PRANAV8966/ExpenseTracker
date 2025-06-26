@@ -77,6 +77,7 @@
       const description = document.getElementById("description").value;
       const category = document.getElementById("category").value;
       const userId = localStorage.getItem("userId");
+      console.log(userId);
 
       try {
         await axios.post("http://localhost:3000/api/createExpense", {
@@ -98,7 +99,7 @@
     async function fetchExpenses() {
       try {
         const response = await axios.get("http://localhost:3000/api/getAllExpenses");
-        const expenses = response.data;
+        const expenses = response.data.data;
 
         list.innerHTML = "";
 
