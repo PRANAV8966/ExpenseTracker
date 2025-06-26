@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      background: #eee;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Expense Tracker</h2>
+    <form id="expense-form">
+      <input type="number" id="amount" placeholder="Amount" required />
+      <input type="text" id="description" placeholder="Description" required />
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Food">Food</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Salary">Salary</option>
+        <option value="Shopping">Shopping</option>
+      </select>
+      <button type="submit">Add Expense</button>
+    </form>
+
+    <h3>Your Expenses</h3>
+    <ul id="expense-list"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Load expenses on page load
+    window.onload = fetchExpenses;
+
+    const form = document.getElementById("expense-form");
+    const list = document.getElementById("expense-list");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const amount = document.getElementById("amount").value;
+      const description = document.getElementById("description").value;
+      const category = document.getElementById("category").value;
+
+      try {
+        await axios.post("http://localhost:3000/api/expenses", {
+          amount,
+          description,
+          category
+        });
+
+        // Re-fetch the list after adding
+        fetchExpenses();
+        form.reset();
+      } catch (err) {
+        alert("Error adding expense");
+        console.error(err);
+      }
+    });
+
+    async function fetchExpenses() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/expenses");
+        const expenses = response.data;
+
+        list.innerHTML = ""; // Clear old list
+
+        expenses.forEach((exp) => {
+          const li = document.createElement("li");
+          li.textContent = `${exp.amount} - ${exp.description} (${exp.category})`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        alert("Error fetching expenses");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

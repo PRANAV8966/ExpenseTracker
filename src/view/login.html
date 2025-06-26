@@ -37,13 +37,13 @@
 
                 if (response.data.data === null) {
                     alert('Log-In failed! error code:404 | NOT FOUND!!');
-                    //window.location.href = "index.html";
+                    window.location.href = "index.html";
                     return;
                 }
 
                 if (!response.data.data) {
                     alert('incorrect password!! 401 | unauthorized');
-                    //window.location.href = "index.html";
+                    window.location.href = "index.html";
                     return;
                 }
                 console.log(response);
