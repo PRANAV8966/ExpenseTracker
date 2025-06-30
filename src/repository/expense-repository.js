@@ -25,9 +25,11 @@ class ExpenseRepository {
         }
      }
 
-     async getAllExpenses() {
+     async getAllExpenses(userid) {
         try {
-            const expenses = await Expense.findAll();
+            const expenses = await Expense.findAll({
+                where : {userId : userid}
+            });
             return expenses;
         } catch (error) {
             console.log('some error occured at repo', error);

@@ -44,7 +44,7 @@ const destroy = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const expense = await expenseController.getAllExpenses();
+        const expense = await expenseController.getAllExpenses(req.user.id);
         return res.status(200).json({
             data:expense,
             success:true,

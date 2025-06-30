@@ -33,25 +33,23 @@
                     password
                 });
 
-                console.log(response, response.data);
+                const result = response.data.data;
 
-                if (response.data.data === null) {
-                    alert('Log-In failed! error code:404 | NOT FOUND!!');
+                if (!result || !result.newToken || !result.dataValues.id) {
+                    alert('Log-In failed! Invalid credentials or server error.');
+                    console.log(result, result.newToken, result.dataValues.id);
                     window.location.href = "index.html";
                     return;
                 }
 
-                if (!response.data.data) {
-                    alert('incorrect password!! 401 | unauthorized');
-                    window.location.href = "index.html";
-                    return;
-                }
-                console.log(response);
+                console.log(result);
+                localStorage.setItem("token", result.newToken);
+
                 alert('Log-In successfull');
-                localStorage.setItem("userId", response.data.data.id);
                 window.location.href = "features.html";
             } catch (error) {
                 alert('Log-In failed! error code:404 | USER NOT FOUND!!');
+                console.log(error);
                 window.location.href = "index.html";
                 return;
             }  

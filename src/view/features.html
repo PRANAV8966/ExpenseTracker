@@ -64,7 +64,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    // Load expenses on page load
     window.onload = fetchExpenses;
 
     const form = document.getElementById("expense-form");
@@ -76,18 +75,18 @@
       const amount = document.getElementById("amount").value;
       const description = document.getElementById("description").value;
       const category = document.getElementById("category").value;
-      const userId = localStorage.getItem("userId");
-      console.log(userId);
+      const token = localStorage.getItem("token");
+      console.log(token);
 
       try {
         await axios.post("http://localhost:3000/api/createExpense", {
           amount,
           description,
-          category,
-          userId
+          category
+        }, {
+          headers:{ Authorization: token }
         });
 
-        // Re-fetch the list after adding
         fetchExpenses();
         form.reset();
       } catch (err) {
@@ -98,8 +97,13 @@
 
     async function fetchExpenses() {
       try {
-        const response = await axios.get("http://localhost:3000/api/getAllExpenses");
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3000/api/getAllExpenses", {
+          headers: { Authorization: token }
+        });
         const expenses = response.data.data;
+        
+
 
         list.innerHTML = "";
 

@@ -3,5 +3,8 @@ dotenv.config();
 
 module.exports = {
     PORT: process.env.PORT,
-    SALT: process.env.SALT
+    SALT: process.env.SALT,
+    jwtKey: process.env.jwtKey,
+    API_ID: process.env.API_ID,
+    SECRET_KEY: process.env.SECRET_KEY
 }

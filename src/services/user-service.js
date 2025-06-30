@@ -1,10 +1,11 @@
 const { UserRepository } = require('../repository/user-repository.js');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
+const { jwtKey } = require('../config/server-config.js');
 
 class UserService {
 
-    constructor() {
+     constructor() {
         this.userService =  new UserRepository();
     }
 
@@ -55,16 +56,38 @@ class UserService {
                 throw {error:'404:user not found!!'}
             }
             const status = await this.#checkPassword(data.password, user.password);
-            if (status) {
-                return user;
+
+            if(!status) {
+                throw {error:'incorrect user details'};
             }
 
-            throw {error:'incorrect user details'};
+            const newToken = await this.createToken({email:user.email, id:user.id});
+            return {...user, newToken};
         } catch (error) {
             console.log('some error occured at service', error);
             throw error;
         }
      }
+
+     createToken(user) {
+        try {
+            const token = jwt.sign(user, jwtKey, {expiresIn: '1h'});
+            return token;
+        } catch (error) {
+            console.log("failed to create token");
+            throw error;
+        }
+    }
+
+    verifyToken(token) {
+        try {
+            const response = jwt.verify(token, jwtKey);
+            return response;
+        } catch (error) {
+            console.log("failed to validate token",);
+            throw error;
+        }
+    }
 
      #checkPassword(userPlainInputPassword, encryptedPassword) {
         try {

@@ -26,9 +26,9 @@ class ExpenseService {
         }
      }
 
-     async getAllExpenses() {
+     async getAllExpenses(id) {
         try {
-            const expenses = await this.expenseService.getAllExpenses();
+            const expenses = await this.expenseService.getAllExpenses(id);
             return expenses;
         } catch (error) {
             console.log('some error occured at repo', error);
