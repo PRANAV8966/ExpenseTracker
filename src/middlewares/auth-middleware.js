@@ -4,7 +4,6 @@ const { jwtKey } = require('../config/server-config.js');
 
 exports.authenticate = async (req, res, next) => {
   try {
-    console.log('this is the token from headers', req.header("Authorization"));
     const token = req.header("Authorization");
     const user = await jwt.verify(token, jwtKey);
     const userId = user.id;

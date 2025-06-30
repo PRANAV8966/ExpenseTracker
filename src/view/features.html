@@ -39,10 +39,33 @@
       margin-bottom: 10px;
       border-radius: 5px;
     }
+    #buy-premium-btn {
+    position: fixed;           
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: gold;   
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;             
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    width: auto !important;
+    max-width: fit-content;
+    display: inline-block;
+    margin: 0 !important;
+  }
+
+  #buy-premium-btn:hover {
+    background-color: #f1c40f; /* Slight change on hover */
+    transform: scale(1.05);
+  }
   </style>
 </head>
 <body>
-
+  <button id="buy-premium-btn" class="premium-btn">Buy Premium</button>
   <div class="container">
     <h2>Expense Tracker</h2>
     <form id="expense-form">
@@ -64,6 +87,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    if (!localStorage.getItem('token')) {
+    document.getElementById('buy-premium-btn').style.display = 'none';
+    } 
+  document.getElementById("buy-premium-btn").addEventListener("click", () => {
+    window.location.href = "payment.html";
+  }); 
     window.onload = fetchExpenses;
 
     const form = document.getElementById("expense-form");
