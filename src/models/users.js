@@ -20,12 +20,28 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.expenses, {
         foreignKey: "userId"
       })
+      this.hasMany(models.Payments, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+});
+
     }
   }
   users.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
+    name: {
+      type:DataTypes.STRING
+    },
+    email:{
+      type:DataTypes.STRING
+    },
+    password: {
+      type:DataTypes.STRING
+    },
+    isPremium: {
+      type:DataTypes.ENUM,
+      values:['TRUE', 'FALSE'],
+      defaultValue:'FALSE'
+    },
   }, {
     sequelize,
     modelName: 'users',

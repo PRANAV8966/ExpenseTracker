@@ -11,14 +11,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Payments.belongsTo(models.users, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+});
+
     }
   }
   Payments.init({
-    orderId: DataTypes.STRING,
-    paymentSessionId: DataTypes.STRING,
-    orderAmount: DataTypes.FLOAT,
-    orderCurrency: DataTypes.STRING,
-    orderStatus: DataTypes.STRING
+    orderId: {
+      type:DataTypes.STRING
+    },
+    paymentSessionId: {
+      type:DataTypes.STRING
+    },
+    orderAmount: {
+      type:DataTypes.FLOAT
+    },
+    orderCurrency: {
+      type:DataTypes.STRING
+    },
+    orderStatus: {
+      type:DataTypes.STRING
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+    },
+  onDelete: 'CASCADE'
+}
   }, {
     sequelize,
     modelName: 'Payments',

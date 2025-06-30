@@ -18,6 +18,11 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      isPremium: {
+        type: Sequelize.ENUM,
+        values:['TRUE', 'FALSE'],
+        defaultValue:'FALSE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
