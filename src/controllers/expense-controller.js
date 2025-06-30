@@ -4,6 +4,7 @@ const expenseController = new ExpenseService();
 
 const create = async (req, res) => {
     try {
+        console.log('this is the request body in create', req.body);
         const expense = await expenseController.create(req.body);
         return res.status(200).json({
             data:expense,
@@ -44,7 +45,9 @@ const destroy = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const expense = await expenseController.getAllExpenses(req.user.id);
+        console.log('this is the user id from token', req.body.userId);
+        const expense = await expenseController.getAllExpenses(req.body.userId);
+        
         return res.status(200).json({
             data:expense,
             success:true,

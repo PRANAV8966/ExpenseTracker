@@ -95,21 +95,21 @@
       }
     });
 
-    async function fetchExpenses() {
+    async function fetchExpenses(userId) {
       try {
         const token = localStorage.getItem("token");
+        console.log('this is the token for fetching', token);
         const response = await axios.get("http://localhost:3000/api/getAllExpenses", {
           headers: { Authorization: token }
         });
+        console.log('this is the response',response);
         const expenses = response.data.data;
-        
-
 
         list.innerHTML = "";
 
         expenses.forEach((exp) => {
           const li = document.createElement("li");
-          li.textContent = `${exp.amount} - ${exp.description} (${exp.category})`;
+          li.textContent = `EXPENSE_AMOUNT: ${exp.amount} - EXPENSE_DESCRIPTION: ${exp.description} - EXPENSE_CATEGORY: (${exp.category})`;
           list.appendChild(li);
         });
       } catch (err) {
