@@ -5,6 +5,7 @@ const { API_ID, SECRET_KEY } =  require('../config/server-config.js');
 const db = require('../models/index.js');
 const payment = db.Payments;
 
+
 const cashfree = new Cashfree(CFEnvironment.SANDBOX, API_ID, SECRET_KEY);
 
 const createOrder = async (
@@ -62,6 +63,7 @@ const fetchPaymentStatus = async (orderId) => {
                 orderId : orderId
             }
         });
+
         return orderStatus;
     } catch (error) {
         console.log('error while fetching the payment status', error);

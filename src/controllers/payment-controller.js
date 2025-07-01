@@ -1,6 +1,8 @@
 const { createOrder, fetchPaymentStatus } =  require('../services/payment-service.js');
 const db = require('../models/index.js');
+const users = require('../models/users.js');
 const payment = db.Payments;
+const user = db.users;
 
 
 const processPayment = async (req, res) => {
@@ -12,19 +14,32 @@ const processPayment = async (req, res) => {
     customer_phone:"9999999999"
     }
     try {
+        console.log('this is the reqbody', req.body);
         const paymentSessionId = await createOrder(
             request.order_amount,
             request.order_currency,
             request.order_id,
             request.customer_id,
-            request.customer_phone);
+            request.customer_phone
+        );
+
+            
         await payment.create({
             orderId: request.order_id,
             orderAmount: request.order_amount,
             orderCurrency: request.order_currency,
             paymentSessionId:paymentSessionId,
             orderStatus: 'PENDING',
+            userId: req.body.userId
         })
+
+        await user.update({
+            isPremium: 'TRUE'
+        }, {
+            where : {
+                id: req.body.userId
+            }
+        });
         return res.status(200).json({
             data:{payment_session_id:paymentSessionId, order_id:request.order_id},
             success:true,
@@ -32,7 +47,7 @@ const processPayment = async (req, res) => {
             error:{}
         });
     } catch (error) {
-        console.log('some error occured at controller',error.reponse.data);
+        console.log('some error occured at controller',error);
         return res.status(200).json({
             data:{},
             success:true,
@@ -52,10 +67,10 @@ const FetchPaymentStatus = async (req, res) => {
             error:{}
         })
     } catch (error) {
-        console.log('some error occured at controller',error.reponse.data);
+        console.log('some error occured at controller',error.reponse);
         return res.status(200).json({
             data:{},
-            success:true,
+            success:false,
             message:'Transaction Failed',
             error:error
         });
