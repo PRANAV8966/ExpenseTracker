@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.expenses, {
+      users.hasMany(models.expenses, {
         foreignKey: "userId"
       })
-      this.hasMany(models.Payments, {
+      users.hasMany(models.Payments, {
       foreignKey: 'userId',
       onDelete: 'CASCADE'
 });
@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     email:{
       type:DataTypes.STRING
+    },
+    totalExpense: {
+      type:DataTypes.FLOAT,     
     },
     password: {
       type:DataTypes.STRING

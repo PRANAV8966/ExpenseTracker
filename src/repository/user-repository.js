@@ -1,6 +1,7 @@
 const db = require('../models/index.js');
 const User = db.users;
 
+
 class UserRepository {
 
      async create(data) {
@@ -37,7 +38,10 @@ class UserRepository {
 
      async getAllUser() {
         try {
-            const users = await User.findAll();
+            const users = await User.findAll({
+                attributes: ['name', 'totalExpense'],
+                order: [['totalExpense', 'DESC']]
+            });
             return users;
         } catch (error) {
             console.log('some error occured at repo', error);
@@ -51,6 +55,22 @@ class UserRepository {
                 where:{ email: Email }
             });
             return user;
+        } catch (error) {
+            console.log('some error occured at repo', error);
+            throw error;
+        }
+     }
+
+     async update(totalExpense, userId) {
+        try {
+            await User.update({
+                totalExpense: totalExpense
+            }, {
+                where : {
+                    id: userId
+                }
+            });
+            return true;
         } catch (error) {
             console.log('some error occured at repo', error);
             throw error;

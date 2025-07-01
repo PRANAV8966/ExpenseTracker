@@ -1,6 +1,5 @@
 const { createOrder, fetchPaymentStatus } =  require('../services/payment-service.js');
 const db = require('../models/index.js');
-const users = require('../models/users.js');
 const payment = db.Payments;
 const user = db.users;
 
@@ -9,7 +8,7 @@ const processPayment = async (req, res) => {
     const request = {
     order_amount:'2500',
     order_currency:'INR',
-    order_id:'ORDER-'+Date.now(),
+    order_id:'ORDER-'+ Date.now(),
     customer_id:'1',
     customer_phone:"9999999999"
     }

@@ -15,6 +15,9 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
+      totalExpense: {
+        type:Sequelize.FLOAT,     
+      },
       password: {
         type: Sequelize.STRING
       },

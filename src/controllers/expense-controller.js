@@ -63,8 +63,28 @@ const getAll = async (req, res) => {
     }
 }
 
+const getAllExpensesForLeaderboard = async (req, res) => {
+    try {
+        const expenses = await expenseController.getAllExpensesForLeaderboard();
+        return res.status(200).json({
+            data: expenses,
+            success:true,
+            message: 'successfully fetched all expense for leaderboard',
+            error:{}
+        });
+    } catch (error) {
+        return res.status(500).json({
+            data:{},
+            success:false,
+            message : 'failed to fetch expenses',
+            error:error
+        });
+    }
+}
+
 module.exports = {
     create,
     destroy,
-    getAll
+    getAll,
+    getAllExpensesForLeaderboard
 }

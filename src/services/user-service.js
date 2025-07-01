@@ -61,7 +61,7 @@ class UserService {
                 throw {error:'incorrect user details'};
             }
 
-            const newToken = await this.createToken({email:user.email, id:user.id});
+            const newToken = await this.createToken({email:user.email, id:user.id, isPremium:user.isPremium});
             return {...user, newToken};
         } catch (error) {
             console.log('some error occured at service', error);
@@ -69,7 +69,7 @@ class UserService {
         }
      }
 
-     createToken(user) {
+    createToken(user) {
         try {
             const token = jwt.sign(user, jwtKey, {expiresIn: '1h'});
             return token;
@@ -89,12 +89,22 @@ class UserService {
         }
     }
 
-     #checkPassword(userPlainInputPassword, encryptedPassword) {
+    #checkPassword(userPlainInputPassword, encryptedPassword) {
         try {
             const response = bcrypt.compareSync(userPlainInputPassword, encryptedPassword);
             return response;
         } catch (error) {
             console.log('password validation failed');
+            throw error;
+        }
+    }
+
+    async update(totalExpense, userId) {
+        try {
+            await this.userService.update(totalExpense, userId);
+            return true;
+        } catch (error) {
+            console.log('failed to update user');
             throw error;
         }
     }
