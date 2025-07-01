@@ -3,9 +3,9 @@ const Expense = db.expenses;
 
 class ExpenseRepository {
 
-     async create(data) {
+     async create(data, options) {
         try {
-            const expense = await Expense.create(data);
+            const expense = await Expense.create(data, options);
             return expense;
         } catch (error) {
             console.log('some error occured at repo', error);

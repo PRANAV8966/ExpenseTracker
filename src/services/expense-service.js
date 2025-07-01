@@ -1,5 +1,7 @@
 const { ExpenseRepository } = require('../repository/expense-repository.js');
 const { UserService } = require('../services/user-service.js');
+
+const { sequelize } = require('../models/index.js');
 const userService = new UserService();
 
 class ExpenseService {
@@ -9,13 +11,21 @@ class ExpenseService {
     }
 
      async create(data) {
+        const t = await sequelize.transaction();
         try {
-            const expense = await this.expenseService.create(data);
-            let totalExpense =+ expense.amount;
-            await userService.update(totalExpense, expense.userId); 
+            const expense = await this.expenseService.create(data, {transaction: t});
+            const user = await userService.getUser(expense.userId, { transaction: t });
+
+            const updatedTotal = Number(user.totalExpense) + Number(expense.amount);
+
+            await userService.update(updatedTotal, expense.userId,
+                { transaction: t}
+            );
+            await t.commit()
             return expense;
         } catch (error) {
             console.log('some error occured at repo', error);
+            await t.rollback();
             throw error;
         }
      }

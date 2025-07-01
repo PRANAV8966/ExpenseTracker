@@ -19,9 +19,9 @@ class UserService {
         }
      }
 
-     async getUser(id) {
+     async getUser(id, options) {
         try {
-            const user = await this.userService.getUser(id);
+            const user = await this.userService.getUser(id, options);
             return user;
         } catch (error) {
             console.log('some error occured at service', error);
@@ -99,9 +99,9 @@ class UserService {
         }
     }
 
-    async update(totalExpense, userId) {
+    async update(totalExpense, userId, options) {
         try {
-            await this.userService.update(totalExpense, userId);
+            await this.userService.update(totalExpense, userId, options);
             return true;
         } catch (error) {
             console.log('failed to update user');

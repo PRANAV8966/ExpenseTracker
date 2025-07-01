@@ -61,14 +61,15 @@ class UserRepository {
         }
      }
 
-     async update(totalExpense, userId) {
+     async update(totalExpense, userId, options) {
         try {
             await User.update({
                 totalExpense: totalExpense
             }, {
                 where : {
                     id: userId
-                }
+                },
+                ...options
             });
             return true;
         } catch (error) {
