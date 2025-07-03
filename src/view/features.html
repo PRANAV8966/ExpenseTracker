@@ -98,6 +98,14 @@
       </select>
       <button type="submit">Add Expense</button>
     </form>
+    <label for="limit-select">Expenses per page:</label>
+<select id="limit-select">
+  <option value="5">5</option>
+  <option value="10" selected>10</option>
+  <option value="15">15</option>
+  <option value="20">20</option>
+</select>
+
 <div class="container"></div>
     <h3>Your Expenses</h3>
     <ul id="expense-list"></ul>
@@ -217,7 +225,14 @@
     });
 
     let currentPage = 1;
-    const limit = 10;
+    let limit = parseInt(document.getElementById('limit-select').value);
+
+    // Update limit when dropdown changes
+    document.getElementById('limit-select').addEventListener('change', () => {
+      limit = parseInt(document.getElementById('limit-select').value);
+      currentPage = 1; // reset to first page
+      fetchExpenses();
+    });
 
     document.getElementById("prev-page-btn").addEventListener("click", () => {
       if (currentPage > 1) {
@@ -235,13 +250,12 @@
       try {
         const token = localStorage.getItem("token");
         console.log('this is the token for fetching', token);
-        let offset = 0;
+
         const response = await axios.get(`http://localhost:3000/api/getAllExpenses`, {
           headers: { Authorization: token },
           params:  { limit, offset: (currentPage - 1) * limit }
         });
-        offset =+ 10;
-        console.log('this is the response',response);
+
         const expenses = response.data.data.rows;
         const totalCount = response.data.data.count || 0;
 
