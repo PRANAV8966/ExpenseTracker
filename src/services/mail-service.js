@@ -48,13 +48,17 @@ class MailService {
 
     async update(newPassword, userEmail) {
         try {
-            await user.update({
+            const status = await user.update({
                 password: newPassword
             }, {
                 where : {
                     email: userEmail
                 }
             });
+            if (!status) {
+                console.log('error throwed');
+                throw {error: 'something went wrong while updating the password'};
+            }
             return {message: "successfully updated the password"};
         } catch (error) {
             console.log('failed to update password', error);

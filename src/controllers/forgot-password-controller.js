@@ -39,21 +39,25 @@ class forgotController {
             console.log('error while fetching the user', error);
             return res.status(500).json({
                 success:false,
-                message:'failed to fetch user or no user exist',
+                message:'failed to fetch user or no user exist or token expired',
                 error:error
             });
         }
     }
 
-    async update(newPassword, token) {
+    async update(req, res) {
         try {
-            await this.mailService.update(newPassword, token);
-            return true;
+            await this.mailService.update(req.body.newPassword, req.query.TID);
+            return res.status(200).json({
+                success:true,
+                message: 'successfully updated password',
+                error: {}
+            });
         } catch (error) {
             return res.status(500).json({
                 success:false,
-                message:'failed to update user or no user exist',
-                error:error
+                message:'failed to update user or no user exist or token expired',
+                error:{error}
             });
         }
     }
