@@ -40,9 +40,9 @@ class ExpenseService {
         }
      }
 
-     async getAllExpenses(id) {
+     async getAllExpenses(id, offset, limit) {
         try {
-            const expenses = await this.expenseService.getAllExpenses(id);
+            const expenses = await this.expenseService.getAllExpenses(id, offset, limit);
             return expenses;
         } catch (error) {
             console.log('some error occured at repo', error);

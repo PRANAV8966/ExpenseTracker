@@ -25,10 +25,14 @@ class ExpenseRepository {
         }
      }
 
-     async getAllExpenses(userid) {
+     async getAllExpenses(userid, offset, limit) {
         try {
-            const expenses = await Expense.findAll({
-                where : {userId : userid}
+            console.log('this is the offset', offset, limit);
+            const expenses = await Expense.findAndCountAll({
+                where : {userId : userid},
+                limit: limit,
+                offset: offset,
+                order: [['createdAt', 'DESC']]
             });
             return expenses;
         } catch (error) {
