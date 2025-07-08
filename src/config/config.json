@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": ".Pranav@123",
+    "password": "<YOUR-DB-PASSWORD>",
     "database": "expense_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
