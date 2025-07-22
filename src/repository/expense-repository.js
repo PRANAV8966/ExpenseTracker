@@ -1,6 +1,7 @@
 const db = require('../models/index.js');
 const Expense = db.expenses;
 
+
 class ExpenseRepository {
 
      async create(data, options) {
@@ -27,7 +28,6 @@ class ExpenseRepository {
 
      async getAllExpenses(userid, offset, limit) {
         try {
-            console.log('this is the offset', offset, limit);
             const expenses = await Expense.findAndCountAll({
                 where : {userId : userid},
                 limit: limit,

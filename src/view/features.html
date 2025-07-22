@@ -65,7 +65,7 @@
   #show-leaderboard-btn {
     width: auto !important;         /* Override global 100% */
     padding: 8px 16px;
-    background-color: #4CAF50;
+    background-color: #322bb5;
     color: white;
     border: none;
     border-radius: 6px;
@@ -77,6 +77,24 @@
   }
 
   #show-leaderboard-btn:hover {
+    background-color: #1e1737;
+  }
+
+  #download-expenses-btn {
+    width: auto !important;         /* Override global 100% */
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px auto;
+    display: block;                /* Center the button */
+    transition: background-color 0.3s ease;
+  }
+
+  #download-expenses-btn:hover {
     background-color: #45a049;
   }
   </style>
@@ -84,6 +102,8 @@
 <body>
   <button id="buy-premium-btn" class="premium-btn">Buy Premium</button>
   <button id="show-leaderboard-btn" style="display:none;position:fixed;top:60px;right:20px;padding:10px 20px;background:#3498db;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;z-index:1000;">Show Leaderboard</button>
+  <button id="download-expenses-btn" style="display:none;">Download Expenses</button>
+  <div id="download-link"></div>
   <div class="container">
     <h2>Expense Tracker</h2>
     <form id="expense-form">
@@ -143,7 +163,6 @@
         try {
           const payload = token.split('.')[1];
           const decoded = JSON.parse(atob(payload));
-          console.log('this is the decoded', decoded);
           return decoded.isPremium === true || decoded.isPremium === 'TRUE';
         } catch (error) {
           console.log('error: ', error);
@@ -158,6 +177,7 @@
         } else if (getIsPremiumFromToken(token)) {
           buyPremiumBtn.style.display = 'none';
           leaderboardBtn.style.display = 'inline-block';
+          document.getElementById('download-expenses-btn').style.display = 'inline-block';
           alert("You are a premium member!");
         } else {
           buyPremiumBtn.style.display = 'inline-block';
@@ -167,6 +187,18 @@
           window.location.href = "payment.html";
         });
         
+        document.getElementById('download-expenses-btn').addEventListener('click', async () => {
+          try {
+            const response = await axios.get('http://localhost:3000/api/downloadExpenses', {
+              headers: { Authorization: token }
+            });
+            document.getElementById('download-link').innerHTML = `<a href="${response.data.fileUrl}" target="_blank">Download File</a>`;
+          } catch (error) {
+            console.log('expense report error', error);
+            alert('Download failed or you are not a premium user.');
+          }
+        });
+
         leaderboardBtn.addEventListener("click", async () => {
         try {
           const token = localStorage.getItem("token");
@@ -264,7 +296,7 @@
         expenses.forEach((exp) => {
           const e = exp.dataValues || exp;
           const li = document.createElement("li");
-          li.textContent = `EXPENSE_AMOUNT: ${e.amount} - EXPENSE_DESCRIPTION: ${e.description} - EXPENSE_CATEGORY: (${e.category})`;
+          li.textContent = `EXPENSE_AMOUNT: ${e.amount} - EXPENSE_DESCRIPTION: ${e.description} - EXPENSE_CATEGORY: ${e.category}`;
           list.appendChild(li);
         });
 
