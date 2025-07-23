@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 const { SALT } = require('../config/server-config.js');
 
 
-
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -16,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       users.hasMany(models.expenses, {
         foreignKey: "userId"
       })
@@ -53,6 +51,6 @@ module.exports = (sequelize, DataTypes) => {
   users.beforeCreate(async (users, options) => {
     const hashedPassword = await bcrypt.hash(users.password, parseInt(SALT));
     users.password = hashedPassword;
-  })
+  });
   return users;
 };

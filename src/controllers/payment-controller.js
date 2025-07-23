@@ -3,6 +3,8 @@ const db = require('../models/index.js');
 const payment = db.Payments;
 const user = db.users;
 
+const { sequelize } = require('../models/index.js');
+
 
 const processPayment = async (req, res) => {
     const request = {
@@ -12,6 +14,7 @@ const processPayment = async (req, res) => {
     customer_id:'1',
     customer_phone:"9999999999"
     }
+    // const t = await sequelize.transaction();
     try {
         console.log('this is the reqbody', req.body);
         const paymentSessionId = await createOrder(
@@ -21,7 +24,6 @@ const processPayment = async (req, res) => {
             request.customer_id,
             request.customer_phone
         );
-
             
         await payment.create({
             orderId: request.order_id,
@@ -39,6 +41,8 @@ const processPayment = async (req, res) => {
                 id: req.body.userId
             }
         });
+
+        // await t.commit();
         return res.status(200).json({
             data:{payment_session_id:paymentSessionId, order_id:request.order_id},
             success:true,
@@ -47,7 +51,8 @@ const processPayment = async (req, res) => {
         });
     } catch (error) {
         console.log('some error occured at controller',error);
-        return res.status(200).json({
+        // await t.rollback;
+        return res.status(500).json({
             data:{},
             success:true,
             message:'Transaction Failed',
