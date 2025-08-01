@@ -1,3 +1,4 @@
+const ip = 'YOUR_IP';
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.querySelector('.signup-form');
 
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const password = form.password.value;
 
     try {
-      const response = await axios.post('http://localhost:3000/api/signUp', {
+      const response = await axios.post(`http://${ip}:3000/api/signUp`, {
         name,
         email,
         password

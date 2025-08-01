@@ -67,7 +67,7 @@ const signIn = async (req, res) => {
         return res.status(200).json({
             data:user,
             success:true,
-            message: 'successfully fetched user',
+            message: 'successfully Signed-In user',
             error:{}
         });
     } catch (error) {
@@ -75,7 +75,7 @@ const signIn = async (req, res) => {
         return res.status(500).json({
             data:{},
             success:false,
-            message : 'failed to fetch user',
+            message : 'failed to signIn user',
             error:error
         });
     }
