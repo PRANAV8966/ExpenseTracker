@@ -152,7 +152,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const ip = 'YOUR_IP';
+    const ip = '';
     if (!localStorage.getItem('token')) {
     document.getElementById('buy-premium-btn').style.display = 'none';
     } 
@@ -190,7 +190,7 @@
         
         document.getElementById('download-expenses-btn').addEventListener('click', async () => {
           try {
-            const response = await axios.get(`http://${ip}:3000/api/downloadExpenses`, {
+            const response = await axios.post(`http://${ip}:3000/api/downloadExpenseReport`,{}, {
               headers: { Authorization: token }
             });
             document.getElementById('download-link').innerHTML = `<a href="${response.data.fileUrl}" target="_blank">Download File</a>`;
