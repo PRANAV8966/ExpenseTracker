@@ -1,30 +1,34 @@
 const AWS = require('aws-sdk');
-const fs = require('fs');
+const fs = require('fs').promises; 
+
+const { AWS_SECRET_KEY, AWS_ACCESS_KEY } = require('../config/server-config.js');
 
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
+  accessKeyId: AWS_ACCESS_KEY,
+  secretAccessKey: AWS_SECRET_KEY,
   region: 'ap-south-1'
 });
 
 const s3 = new AWS.S3();
 
-function uploadToS3(filepath, filename, callback) {
-  const fileContent = fs.readFileSync(filepath);
+async function uploadToS3(filepath, filename) {
+  try {
+    const fileContent = await fs.readFile(filepath);
 
-  const params = {
-    Bucket: 'myexpensebucket1234',
-    Key: `reports/${filename}`,
-    Body: fileContent,
-    ContentType: 'application/pdf'
-  };
+    const params = {
+      Bucket: 'myexpensebucket1234',
+      Key: `reports/${filename}`,
+      Body: fileContent,
+      ContentType: 'application/pdf'
+    };
 
-  s3.upload(params, (err, data) => {
-    if (err) return callback(err);
-    callback(null, data.Location); // S3 file URL
-  });
+    const data = await s3.upload(params).promise(); 
+    return data.Location; 
+  } catch (err) {
+    throw err; 
+  }
 }
 
 module.exports = {
-    uploadToS3
-}
+  uploadToS3
+};

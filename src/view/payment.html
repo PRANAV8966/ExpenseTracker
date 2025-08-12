@@ -46,7 +46,7 @@
                 try {
                     const token = localStorage.getItem("token");
                     console.log('this is the token on browser', token);
-                    const response = await axios.post('http://13.201.101.231:3000/api/pay/paying',{}, {
+                    const response = await axios.post('http://YOUR_IP:3000/api/pay/paying',{}, {
                         headers: { Authorization: token }
                     });
                     console.log('this is the response',response.data);

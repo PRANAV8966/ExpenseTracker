@@ -40,6 +40,20 @@ class ExpenseRepository {
             throw error;
         }
      }
+
+     async getAll(userId) {
+        try {
+            const expenses = await Expense.findAll({
+                where : {
+                    userId: userId
+                }
+            })
+            return expenses;
+        } catch (error) {
+            console.log('some error occured at repo', error);
+            throw error;
+        }
+     }
 }
 
 module.exports = {

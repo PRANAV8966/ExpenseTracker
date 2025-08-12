@@ -24,7 +24,7 @@ class ExpenseService {
             await t.commit()
             return expense;
         } catch (error) {
-            console.log('some error occured at repo', error);
+            console.log('some error occured at service', error);
             await t.rollback();
             throw error;
         }
@@ -35,7 +35,7 @@ class ExpenseService {
             const expense = await this.expenseService.destroy(Id);
             return true;
         } catch (error) {
-            console.log('some error occured at repo', error);
+            console.log('some error occured at service', error);
             throw error;
         }
      }
@@ -45,7 +45,7 @@ class ExpenseService {
             const expenses = await this.expenseService.getAllExpenses(id, offset, limit);
             return expenses;
         } catch (error) {
-            console.log('some error occured at repo', error);
+            console.log('some error occured at service', error);
             throw error;
         }
      }
@@ -55,7 +55,17 @@ class ExpenseService {
             const expenses = await this.expenseService.getAllExpensesForLeaderboard();
             return expenses;
         } catch (error) {
-            console.log('some error occured at repo', error);
+            console.log('some error occured at service', error);
+            throw error;
+        }
+     }
+
+     async getAll(userId) {
+        try {
+            const expenses = await this.expenseService.getAll(userId)
+            return expenses;
+        } catch (error) {
+            console.log('some error occured at service', error);
             throw error;
         }
      }
