@@ -6,6 +6,7 @@ const apiRoutes = require('./src/routes/index.js');
 const paymentApiRoutes = require('./src/routes/payment-routes.js');
 
 const path = require('path');
+const { start } = require('repl');
 
 const startServer = async () => {
 
@@ -24,6 +25,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
         console.log(`server running on PORT: ${PORT}`);
     });
-};
+}
 
 startServer();

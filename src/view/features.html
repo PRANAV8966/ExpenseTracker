@@ -152,7 +152,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const ip = '13.201.99.225';
+    const ip = '65.2.57.213';
 
   window.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem("token");
@@ -246,31 +246,56 @@
   let limit = parseInt(document.getElementById('limit-select').value);
 
   async function fetchExpenses() {
-    try {
-      const response = await axios.get(`http://${ip}:3000/api/getAllExpenses`, {
-        headers: { Authorization: token },
-        params: { limit, offset: (currentPage - 1) * limit }
+  try {
+    const response = await axios.get(`http://${ip}:3000/api/getAllExpenses`, {
+      headers: { Authorization: token },
+      params: { limit, offset: (currentPage - 1) * limit }
+    });
+
+    const expenses = response.data.data.rows;
+    const totalCount = response.data.data.count || 0;
+
+    list.innerHTML = "";
+
+    expenses.forEach((exp) => {
+      const e = exp.dataValues || exp;
+
+      const li = document.createElement("li");
+      li.setAttribute("data-id", e.id); 
+
+      li.innerHTML = `
+        EXPENSE_AMOUNT: ${e.amount} - 
+        EXPENSE_DESCRIPTION: ${e.description} - 
+        EXPENSE_CATEGORY: ${e.category}
+        <button class="delete-btn" style="margin-left:10px; background:#e74c3c; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">
+          Delete
+        </button>
+      `;
+
+      li.querySelector(".delete-btn").addEventListener("click", async () => {
+        try {
+          await axios.delete(`http://${ip}:3000/api/deleteExpense/${e.id}`, {
+            headers: { Authorization: token }
+          });
+          li.remove();
+        } catch (err) {
+          console.error("Delete failed:", err);
+          alert("Failed to delete expense");
+        }
       });
 
-      const expenses = response.data.data.rows;
-      const totalCount = response.data.data.count || 0;
+      list.appendChild(li);
+    });
 
-      list.innerHTML = "";
-      expenses.forEach((exp) => {
-        const e = exp.dataValues || exp;
-        const li = document.createElement("li");
-        li.textContent = `EXPENSE_AMOUNT: ${e.amount} - EXPENSE_DESCRIPTION: ${e.description} - EXPENSE_CATEGORY: ${e.category}`;
-        list.appendChild(li);
-      });
+    document.getElementById("page-info").textContent = `Page ${currentPage}`;
+    document.getElementById("prev-page-btn").style.display = currentPage > 1 ? "inline-block" : "none";
+    document.getElementById("next-page-btn").style.display = (currentPage * limit < totalCount) ? "inline-block" : "none";
 
-      document.getElementById("page-info").textContent = `Page ${currentPage}`;
-      document.getElementById("prev-page-btn").style.display = currentPage > 1 ? "inline-block" : "none";
-      document.getElementById("next-page-btn").style.display = (currentPage * limit < totalCount) ? "inline-block" : "none";
-    } catch (err) {
-      alert("Error fetching expenses");
-      console.error(err);
-    }
+  } catch (err) {
+    alert("Error fetching expenses");
+    console.error(err);
   }
+}
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

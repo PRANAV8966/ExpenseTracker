@@ -1,3 +1,7 @@
 node_modules
 .env
 src/config/config.json
+index.d.ts
+index.ts
+index.js.map
+tsconfig.json
